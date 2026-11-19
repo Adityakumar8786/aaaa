@@ -1,0 +1,555 @@
+{
+  "meta": {
+    "db_id": "baseball_1",
+    "n_tables": 26,
+    "n_questions": 50,
+    "seed": 42,
+    "bucket_counts": {
+      "1": 15,
+      "2": 31,
+      "3": 4
+    },
+    "created": "2026-11-19T05:47:06+00:00"
+  },
+  "questions": [
+    {
+      "qid": "q001",
+      "db_id": "baseball_1",
+      "question": "What are the first name and last name of the players who have weight above 220 or height below 75?",
+      "gold_sql": "SELECT name_first ,  name_last FROM player WHERE weight  >  220 OR height  <  75",
+      "gold_tables": [
+        "player"
+      ],
+      "bucket": 1
+    },
+    {
+      "qid": "q002",
+      "db_id": "baseball_1",
+      "question": "Find the year in which the least people enter hall of fame.",
+      "gold_sql": "SELECT yearid FROM hall_of_fame GROUP BY yearid ORDER BY count(*) ASC LIMIT 1;",
+      "gold_tables": [
+        "hall_of_fame"
+      ],
+      "bucket": 1
+    },
+    {
+      "qid": "q003",
+      "db_id": "baseball_1",
+      "question": "How many players enter hall of fame each year?",
+      "gold_sql": "SELECT yearid ,  count(*) FROM hall_of_fame GROUP BY yearid;",
+      "gold_tables": [
+        "hall_of_fame"
+      ],
+      "bucket": 1
+    },
+    {
+      "qid": "q004",
+      "db_id": "baseball_1",
+      "question": "List the names of states that have more than 2 parks.",
+      "gold_sql": "SELECT state FROM park GROUP BY state HAVING count(*)  >  2;",
+      "gold_tables": [
+        "park"
+      ],
+      "bucket": 1
+    },
+    {
+      "qid": "q005",
+      "db_id": "baseball_1",
+      "question": "In which year did the least people enter hall of fame?",
+      "gold_sql": "SELECT yearid FROM hall_of_fame GROUP BY yearid ORDER BY count(*) ASC LIMIT 1;",
+      "gold_tables": [
+        "hall_of_fame"
+      ],
+      "bucket": 1
+    },
+    {
+      "qid": "q006",
+      "db_id": "baseball_1",
+      "question": "What were all the salary values of players in 2010 and 2001?",
+      "gold_sql": "SELECT salary FROM salary WHERE YEAR  =  2010 UNION SELECT salary FROM salary WHERE YEAR  =  2001",
+      "gold_tables": [
+        "salary"
+      ],
+      "bucket": 1
+    },
+    {
+      "qid": "q007",
+      "db_id": "baseball_1",
+      "question": "How many games were played in city Atlanta in 2000?",
+      "gold_sql": "SELECT count(*) FROM home_game AS T1 JOIN park AS T2 ON T1.park_id  =  T2.park_id WHERE T1.year  =  2000 AND T2.city  =  'Atlanta';",
+      "gold_tables": [
+        "home_game",
+        "park"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q008",
+      "db_id": "baseball_1",
+      "question": "Which 3 players won the most player awards? List their full name and id.",
+      "gold_sql": "SELECT T1.name_first ,  T1.name_last ,  T1.player_id FROM player AS T1 JOIN player_award AS T2 ON T1.player_id  =  T2.player_id GROUP BY T1.player_id ORDER BY count(*) DESC LIMIT 3;",
+      "gold_tables": [
+        "player",
+        "player_award"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q009",
+      "db_id": "baseball_1",
+      "question": "What is the total salary paid by team Boston Red Stockings in 2010?",
+      "gold_sql": "SELECT sum(T1.salary) FROM salary AS T1 JOIN team AS T2 ON T1.team_id  =  T2.team_id_br WHERE T2.name  = 'Boston Red Stockings' AND T1.year  =  2010",
+      "gold_tables": [
+        "salary",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q010",
+      "db_id": "baseball_1",
+      "question": "Count the number of times the team \"Boston Red Stockings\" lost in 2009 postseason.",
+      "gold_sql": "SELECT count(*) FROM postseason AS T1 JOIN team AS T2 ON T1.team_id_loser  =  T2.team_id_br WHERE T2.name  =  'Boston Red Stockings' AND T1.year = 2009;",
+      "gold_tables": [
+        "postseason",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q011",
+      "db_id": "baseball_1",
+      "question": "What are the name and id of the team offering the lowest average salary?",
+      "gold_sql": "SELECT T1.name ,  T1.team_id FROM team AS T1 JOIN salary AS T2 ON T1.team_id = T2.team_id GROUP BY T1.team_id ORDER BY avg(T2.salary) ASC LIMIT 1;",
+      "gold_tables": [
+        "team",
+        "salary"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q012",
+      "db_id": "baseball_1",
+      "question": "What are the maximum scores the team Boston Red Stockings got when the team won in postseason?",
+      "gold_sql": "SELECT max(T1.wins) FROM postseason AS T1 JOIN team AS T2 ON T1.team_id_winner  =  T2.team_id_br WHERE T2.name  =  'Boston Red Stockings';",
+      "gold_tables": [
+        "postseason",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q013",
+      "db_id": "baseball_1",
+      "question": "How many parks are there in the state of NY?",
+      "gold_sql": "SELECT count(*) FROM park WHERE state  =  'NY';",
+      "gold_tables": [
+        "park"
+      ],
+      "bucket": 1
+    },
+    {
+      "qid": "q014",
+      "db_id": "baseball_1",
+      "question": "Find the players' first name and last name who won award both in 1960 and in 1961.",
+      "gold_sql": "SELECT T1.name_first , T1.name_last FROM player AS T1 JOIN player_award AS T2 WHERE T2.year  =  1960 INTERSECT SELECT T1.name_first , T1.name_last FROM player AS T1 JOIN player_award AS T2 WHERE T2.year  =  1961",
+      "gold_tables": [
+        "player",
+        "player_award"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q015",
+      "db_id": "baseball_1",
+      "question": "What are first and last names of players participating in all star game in 1998?",
+      "gold_sql": "SELECT name_first ,  name_last FROM player AS T1 JOIN all_star AS T2 ON T1.player_id  =  T2.player_id WHERE YEAR  =  1998",
+      "gold_tables": [
+        "player",
+        "all_star"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q016",
+      "db_id": "baseball_1",
+      "question": "Count the total number of games the team Boston Red Stockings attended from 1990 to 2000.",
+      "gold_sql": "SELECT sum(T1.games) FROM home_game AS T1 JOIN team AS T2 ON T1.team_id = T2.team_id_br WHERE T2.name = 'Boston Red Stockings' AND T1.year BETWEEN 1990 AND 2000;",
+      "gold_tables": [
+        "home_game",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q017",
+      "db_id": "baseball_1",
+      "question": "What is the average height of the players from the college named 'Yale University'?",
+      "gold_sql": "SELECT avg(T1.height) FROM player AS T1 JOIN player_college AS T2 ON T1.player_id  =  T2.player_id JOIN college AS T3 ON T3.college_id  =  T2.college_id WHERE T3.name_full  =  'Yale University';",
+      "gold_tables": [
+        "player",
+        "player_college",
+        "college"
+      ],
+      "bucket": 3
+    },
+    {
+      "qid": "q018",
+      "db_id": "baseball_1",
+      "question": "Compute the total salary that the player with first name Len and last name Barker received between 1985 to 1990.",
+      "gold_sql": "SELECT sum(T1.salary) FROM salary AS T1 JOIN player AS T2 ON T1.player_id = T2.player_id WHERE T2.name_first  =  'Len' AND T2.name_last = 'Barker' AND T1.year BETWEEN 1985 AND 1990;",
+      "gold_tables": [
+        "salary",
+        "player"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q019",
+      "db_id": "baseball_1",
+      "question": "What is the number of wins the team Boston Red Stockings got in the postseasons each year in history?",
+      "gold_sql": "SELECT count(*) ,  T1.year FROM postseason AS T1 JOIN team AS T2 ON T1.team_id_winner  =  T2.team_id_br WHERE T2.name  =  'Boston Red Stockings' GROUP BY T1.year",
+      "gold_tables": [
+        "postseason",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q020",
+      "db_id": "baseball_1",
+      "question": "What are the first name and last name of the players who were paid salary by team Washington Nationals in both 2005 and 2007?",
+      "gold_sql": "SELECT T2.name_first ,  T2.name_last FROM salary AS T1 JOIN player AS T2 ON T1.player_id = T2.player_id JOIN team AS T3 ON T3.team_id_br = T1.team_id WHERE T1.year = 2005 AND T3.name = 'Washington Nationals' INTERSECT SELECT T2.name_first , T2.name_last FROM salary AS T1 JOIN player AS T2 ON T1.player_id = T2.player_id JOIN team AS T3 ON T3.team_id_br = T1.team_id WHERE T1.year = 2007 AND T3.name = 'Washington Nationals'",
+      "gold_tables": [
+        "salary",
+        "player",
+        "team"
+      ],
+      "bucket": 3
+    },
+    {
+      "qid": "q021",
+      "db_id": "baseball_1",
+      "question": "Which team had the least number of attendances in home games in 1980?",
+      "gold_sql": "SELECT T2.name FROM home_game AS T1 JOIN team AS T2 ON T1.team_id = T2.team_id_br WHERE T1.year = 1980 ORDER BY T1.attendance ASC LIMIT 1;",
+      "gold_tables": [
+        "home_game",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q022",
+      "db_id": "baseball_1",
+      "question": "How many players did Boston Red Stockings have in 2000?",
+      "gold_sql": "SELECT count(*) FROM salary AS T1 JOIN team AS T2 ON T1.team_id  =  T2.team_id_br WHERE T2.name  = 'Boston Red Stockings' AND T1.year  =  2000",
+      "gold_tables": [
+        "salary",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q023",
+      "db_id": "baseball_1",
+      "question": "List the maximum scores of the team Boston Red Stockings when the team won in postseason?",
+      "gold_sql": "SELECT max(T1.wins) FROM postseason AS T1 JOIN team AS T2 ON T1.team_id_winner  =  T2.team_id_br WHERE T2.name  =  'Boston Red Stockings';",
+      "gold_tables": [
+        "postseason",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q024",
+      "db_id": "baseball_1",
+      "question": "How many games in total did team Boston Red Stockings attend from 2000 to 2010?",
+      "gold_sql": "SELECT sum(T1.attendance) FROM home_game AS T1 JOIN team AS T2 ON T1.team_id  =  T2.team_id_br WHERE T2.name  =  'Boston Red Stockings' AND T1.year BETWEEN 2000 AND 2010;",
+      "gold_tables": [
+        "home_game",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q025",
+      "db_id": "baseball_1",
+      "question": "What are the manager's first name, last name and id who won the most manager award?",
+      "gold_sql": "SELECT T1.name_first ,  T1.name_last ,  T2.player_id FROM player AS T1 JOIN manager_award AS T2 ON T1.player_id  =  T2.player_id GROUP BY T2.player_id ORDER BY count(*) DESC LIMIT 1;",
+      "gold_tables": [
+        "player",
+        "manager_award"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q026",
+      "db_id": "baseball_1",
+      "question": "List the 3 highest salaries of the players in 2001?",
+      "gold_sql": "SELECT salary FROM salary WHERE YEAR  =  2001 ORDER BY salary DESC LIMIT 3;",
+      "gold_tables": [
+        "salary"
+      ],
+      "bucket": 1
+    },
+    {
+      "qid": "q027",
+      "db_id": "baseball_1",
+      "question": "What is the total number of postseason games that team Boston Red Stockings participated in?",
+      "gold_sql": "SELECT count(*) FROM ( SELECT * FROM postseason AS T1 JOIN team AS T2 ON T1.team_id_winner  =  T2.team_id_br WHERE T2.name  =  'Boston Red Stockings' UNION SELECT * FROM postseason AS T1 JOIN team AS T2 ON T1.team_id_loser  =  T2.team_id_br WHERE T2.name  =  'Boston Red Stockings' );",
+      "gold_tables": [
+        "postseason",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q028",
+      "db_id": "baseball_1",
+      "question": "How many team franchises are active, with active value 'Y'?",
+      "gold_sql": "SELECT count(*) FROM team_franchise WHERE active = 'Y';",
+      "gold_tables": [
+        "team_franchise"
+      ],
+      "bucket": 1
+    },
+    {
+      "qid": "q029",
+      "db_id": "baseball_1",
+      "question": "Find the number of team franchises that are active (have 'Y' as \"active\" information).",
+      "gold_sql": "SELECT count(*) FROM team_franchise WHERE active = 'Y';",
+      "gold_tables": [
+        "team_franchise"
+      ],
+      "bucket": 1
+    },
+    {
+      "qid": "q030",
+      "db_id": "baseball_1",
+      "question": "Find the average height of the players who belong to the college called 'Yale University'.",
+      "gold_sql": "SELECT avg(T1.height) FROM player AS T1 JOIN player_college AS T2 ON T1.player_id  =  T2.player_id JOIN college AS T3 ON T3.college_id  =  T2.college_id WHERE T3.name_full  =  'Yale University';",
+      "gold_tables": [
+        "player",
+        "player_college",
+        "college"
+      ],
+      "bucket": 3
+    },
+    {
+      "qid": "q031",
+      "db_id": "baseball_1",
+      "question": "Count the number of games taken place in park \"Columbia Park\" in 1907.",
+      "gold_sql": "SELECT count(*) FROM home_game AS T1 JOIN park AS T2 ON T1.park_id  =  T2.park_id WHERE T1.year = 1907 AND T2.park_name = 'Columbia Park';",
+      "gold_tables": [
+        "home_game",
+        "park"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q032",
+      "db_id": "baseball_1",
+      "question": "Show me the number of parks the state of NY has.",
+      "gold_sql": "SELECT count(*) FROM park WHERE state  =  'NY';",
+      "gold_tables": [
+        "park"
+      ],
+      "bucket": 1
+    },
+    {
+      "qid": "q033",
+      "db_id": "baseball_1",
+      "question": "How many players were in the team Boston Red Stockings in 2000?",
+      "gold_sql": "SELECT count(*) FROM salary AS T1 JOIN team AS T2 ON T1.team_id  =  T2.team_id_br WHERE T2.name  = 'Boston Red Stockings' AND T1.year  =  2000",
+      "gold_tables": [
+        "salary",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q034",
+      "db_id": "baseball_1",
+      "question": "Find all the players' first name and last name who have empty death record.",
+      "gold_sql": "SELECT name_first ,  name_last FROM player WHERE death_year = '';",
+      "gold_tables": [
+        "player"
+      ],
+      "bucket": 1
+    },
+    {
+      "qid": "q035",
+      "db_id": "baseball_1",
+      "question": "Find the id and rank of the team that has the highest average attendance rate in 2014.",
+      "gold_sql": "SELECT T2.team_id ,  T2.rank FROM home_game AS T1 JOIN team AS T2 ON T1.team_id  =  T2.team_id WHERE T1.year  =  2014 GROUP BY T1.team_id ORDER BY avg(T1.attendance) DESC LIMIT 1;",
+      "gold_tables": [
+        "home_game",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q036",
+      "db_id": "baseball_1",
+      "question": "How many players born in USA are right-handed batters? That is, have the batter value 'R'.",
+      "gold_sql": "SELECT count(*) FROM player WHERE birth_country = 'USA' AND bats  =  'R';",
+      "gold_tables": [
+        "player"
+      ],
+      "bucket": 1
+    },
+    {
+      "qid": "q037",
+      "db_id": "baseball_1",
+      "question": "Which park had most attendances in 2008?",
+      "gold_sql": "SELECT T2.park_name FROM home_game AS T1 JOIN park AS T2 ON T1.park_id  =  T2.park_id WHERE T1.year = 2008 ORDER BY T1.attendance DESC LIMIT 1;",
+      "gold_tables": [
+        "home_game",
+        "park"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q038",
+      "db_id": "baseball_1",
+      "question": "What are the name and id of the team with the most victories in 2008 postseason?",
+      "gold_sql": "SELECT T2.name ,  T1.team_id_winner FROM postseason AS T1 JOIN team AS T2 ON T1.team_id_winner  =  T2.team_id_br WHERE T1.year  =  2008 GROUP BY T1.team_id_winner ORDER BY count(*) DESC LIMIT 1;",
+      "gold_tables": [
+        "postseason",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q039",
+      "db_id": "baseball_1",
+      "question": "Compute the average salary of the players in the team called 'Boston Red Stockings'.",
+      "gold_sql": "SELECT avg(T1.salary) FROM salary AS T1 JOIN team AS T2 ON T1.team_id  =  T2.team_id_br WHERE T2.name  = 'Boston Red Stockings'",
+      "gold_tables": [
+        "salary",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q040",
+      "db_id": "baseball_1",
+      "question": "Which manager won the most manager award? Give me the manager's first name, last name and id.",
+      "gold_sql": "SELECT T1.name_first ,  T1.name_last ,  T2.player_id FROM player AS T1 JOIN manager_award AS T2 ON T1.player_id  =  T2.player_id GROUP BY T2.player_id ORDER BY count(*) DESC LIMIT 1;",
+      "gold_tables": [
+        "player",
+        "manager_award"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q041",
+      "db_id": "baseball_1",
+      "question": "List players' first name and last name who received salary from team Washington Nationals in both 2005 and 2007.",
+      "gold_sql": "SELECT T2.name_first ,  T2.name_last FROM salary AS T1 JOIN player AS T2 ON T1.player_id = T2.player_id JOIN team AS T3 ON T3.team_id_br = T1.team_id WHERE T1.year = 2005 AND T3.name = 'Washington Nationals' INTERSECT SELECT T2.name_first , T2.name_last FROM salary AS T1 JOIN player AS T2 ON T1.player_id = T2.player_id JOIN team AS T3 ON T3.team_id_br = T1.team_id WHERE T1.year = 2007 AND T3.name = 'Washington Nationals'",
+      "gold_tables": [
+        "salary",
+        "player",
+        "team"
+      ],
+      "bucket": 3
+    },
+    {
+      "qid": "q042",
+      "db_id": "baseball_1",
+      "question": "How many times in total did the team Boston Red Stockings participate in postseason games?",
+      "gold_sql": "SELECT count(*) FROM ( SELECT * FROM postseason AS T1 JOIN team AS T2 ON T1.team_id_winner  =  T2.team_id_br WHERE T2.name  =  'Boston Red Stockings' UNION SELECT * FROM postseason AS T1 JOIN team AS T2 ON T1.team_id_loser  =  T2.team_id_br WHERE T2.name  =  'Boston Red Stockings' );",
+      "gold_tables": [
+        "postseason",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q043",
+      "db_id": "baseball_1",
+      "question": "What is the total salary expenses of team Boston Red Stockings in 2010?",
+      "gold_sql": "SELECT sum(T1.salary) FROM salary AS T1 JOIN team AS T2 ON T1.team_id  =  T2.team_id_br WHERE T2.name  = 'Boston Red Stockings' AND T1.year  =  2010",
+      "gold_tables": [
+        "salary",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q044",
+      "db_id": "baseball_1",
+      "question": "Find the number of tied games (the value of \"ties\" is '1') in 1885 postseason.",
+      "gold_sql": "SELECT count(*) FROM postseason WHERE YEAR  =  1885 AND ties  =  1;",
+      "gold_tables": [
+        "postseason"
+      ],
+      "bucket": 1
+    },
+    {
+      "qid": "q045",
+      "db_id": "baseball_1",
+      "question": "How many times did Boston Red Stockings lose in 2009 postseason?",
+      "gold_sql": "SELECT count(*) FROM postseason AS T1 JOIN team AS T2 ON T1.team_id_loser  =  T2.team_id_br WHERE T2.name  =  'Boston Red Stockings' AND T1.year = 2009;",
+      "gold_tables": [
+        "postseason",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q046",
+      "db_id": "baseball_1",
+      "question": "Find the name and id of the team that won the most times in 2008 postseason.",
+      "gold_sql": "SELECT T2.name ,  T1.team_id_winner FROM postseason AS T1 JOIN team AS T2 ON T1.team_id_winner  =  T2.team_id_br WHERE T1.year  =  2008 GROUP BY T1.team_id_winner ORDER BY count(*) DESC LIMIT 1;",
+      "gold_tables": [
+        "postseason",
+        "team"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q047",
+      "db_id": "baseball_1",
+      "question": "What are the three countries that the least players are from?",
+      "gold_sql": "SELECT birth_country FROM player GROUP BY birth_country ORDER BY count(*) ASC LIMIT 3;",
+      "gold_tables": [
+        "player"
+      ],
+      "bucket": 1
+    },
+    {
+      "qid": "q048",
+      "db_id": "baseball_1",
+      "question": "Which park did the most people attend in 2008?",
+      "gold_sql": "SELECT T2.park_name FROM home_game AS T1 JOIN park AS T2 ON T1.park_id  =  T2.park_id WHERE T1.year = 2008 ORDER BY T1.attendance DESC LIMIT 1;",
+      "gold_tables": [
+        "home_game",
+        "park"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q049",
+      "db_id": "baseball_1",
+      "question": "what is the full name and id of the college with the largest number of baseball players?",
+      "gold_sql": "SELECT T1.name_full ,  T1.college_id FROM college AS T1 JOIN player_college AS T2 ON T1.college_id  =  T2.college_id GROUP BY T1.college_id ORDER BY count(*) DESC LIMIT 1;",
+      "gold_tables": [
+        "college",
+        "player_college"
+      ],
+      "bucket": 2
+    },
+    {
+      "qid": "q050",
+      "db_id": "baseball_1",
+      "question": "Which players won awards in both 1960 and 1961? Return their first names and last names.",
+      "gold_sql": "SELECT T1.name_first , T1.name_last FROM player AS T1 JOIN player_award AS T2 WHERE T2.year  =  1960 INTERSECT SELECT T1.name_first , T1.name_last FROM player AS T1 JOIN player_award AS T2 WHERE T2.year  =  1961",
+      "gold_tables": [
+        "player",
+        "player_award"
+      ],
+      "bucket": 2
+    }
+  ]
+}

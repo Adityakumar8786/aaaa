@@ -1,0 +1,9 @@
+{
+  "fingerprint": "2e458b237bd0d474",
+  "config": "topk_vector",
+  "model": "openai/gpt-oss-20b",
+  "embedder_used": "tfidf_char (fallback)",
+  "graph": "retrieve_tables -> generate_sql -> execute_sql",
+  "gold_hash": "2c2a1d2481e8",
+  "updated": "2026-11-16 12:27:02"
+}

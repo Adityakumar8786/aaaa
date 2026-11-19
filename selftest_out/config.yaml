@@ -1,0 +1,88 @@
+paths:
+  spider_dir: ./fake_spider
+  data_dir: ./data
+  results_dir: ./results
+  cache_path: ./.cache/c.sqlite
+  report_path: ./report.md
+dataset:
+  db_id: auto
+  min_tables: 20
+  n_questions: 40
+  seed: 42
+  question_files:
+  - train_spider.json
+  - train_others.json
+  - dev.json
+  bucket_mix:
+    1: 0.3
+    2: 0.4
+    3: 0.3
+  exclude_empty_gold: true
+llm:
+  model: llama-3.1-8b-instant
+  temperature: 0.0
+  max_tokens: 512
+  rpm: 25
+  tpm: 5500
+  max_retries: 6
+  max_wait_seconds: 90
+  use_cache: true
+execution:
+  timeout_s: 15
+defaults:
+  k: 2
+  candidates_k: 6
+  embedder_type: tfidf_char
+  embedder_model: nomic-embed-text-v1_5
+  embedder_fallback: none
+  bm25_k1: 1.5
+  bm25_b: 0.75
+  fusion: rrf
+  rrf_k: 60
+  alpha: 0.5
+  max_retries: 2
+  retry_on_empty: true
+  retry_judge: true
+  retry_schema: hybrid_rerank
+  retry_full_schema_last: true
+  judge_rows: 5
+  fk_mode: bridge
+  fk_max_added: 3
+  fk_infer_shared_id: true
+configs:
+  full_schema:
+    description: Baseline - the entire schema goes into the prompt
+    retriever: full
+  topk_vector:
+    description: Top-k tables by vector similarity
+    retriever: vector
+  hybrid:
+    description: Top-k tables by vector + BM25 (reciprocal rank fusion)
+    retriever: hybrid
+  topk_vector_rerank:
+    description: Vector top-N candidates -> LLM reranker keeps best k
+    retriever: vector
+    rerank: true
+  hybrid_rerank:
+    description: Hybrid top-N candidates -> LLM reranker keeps best k
+    retriever: hybrid
+    rerank: true
+  all_combined:
+    description: Hybrid -> LLM reranker -> FK bridge expansion
+    retriever: hybrid
+    rerank: true
+    fk_expand: true
+  full_schema_retry:
+    description: full_schema + error-fix loop (2 retries)
+    retriever: full
+    max_retries: 2
+  hybrid_retry:
+    description: hybrid + error-fix loop (2 retries)
+    retriever: hybrid
+    max_retries: 2
+  all_combined_retry:
+    description: hybrid -> reranker -> FK expansion + error-fix loop (2 retries)
+    retriever: hybrid
+    rerank: true
+    fk_expand: true
+    max_retries: 2

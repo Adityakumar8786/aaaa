@@ -1,0 +1,9 @@
+{
+  "fingerprint": "9d042e220e89e9de",
+  "config": "full_schema",
+  "model": "openai/gpt-oss-20b",
+  "embedder_used": "-",
+  "graph": "retrieve_tables -> generate_sql -> execute_sql",
+  "gold_hash": "2c2a1d2481e8",
+  "updated": "2026-11-16 11:09:00"
+}

@@ -1,0 +1,39 @@
+# =============================================================================
+#  OLLAMA CONFIG  --  run the same benchmark with a LOCAL model (no API key, no daily limits).
+#  Inherits everything from config.yaml (dataset, the 9 configurations, retrieval defaults)
+#  and only overrides what is Ollama-specific. Keep this file next to config.yaml.
+#
+#  Usage:  python -m nl2sql -c config.ollama.yaml <command>
+#  Results/report go to separate files (results_ollama/, report_ollama.md) so they never mix with Groq runs.
+#  The gold set (data/gold.json) is SHARED, so Groq and Ollama are evaluated on identical questions.
+# =============================================================================
+extends: config.yaml
+
+paths:
+  results_dir: ./results_ollama
+  cache_path: ./.cache/ollama_cache.sqlite
+  report_path: ./report_ollama.md
+
+llm:
+  provider: ollama
+  # Pick a model that fits your RAM/VRAM (install with `python -m nl2sql -c config.ollama.yaml ollama-setup`):
+  #   qwen2.5-coder:3b    ~2 GB   fast, weaker SQL           (4-8 GB RAM laptops)
+  #   qwen2.5-coder:7b    ~4.7 GB good balance  <- default   (8-16 GB RAM, or 6+ GB VRAM)
+  #   qwen2.5-coder:14b   ~9 GB   noticeably better SQL      (16+ GB RAM / 12 GB VRAM)
+  #   llama3.1:8b         ~4.9 GB general-purpose alternative
+  model: qwen2.5-coder:7b
+  temperature: 0.0
+  max_tokens: 512
+  use_cache: true
+  ollama:
+    # host: http://localhost:11434
+    host: https://street-classes-reconstruction-oct.trycloudflare.com
+    num_ctx: 8192        # context window. Ollama's default (2-4K) would silently CUT the full-schema prompt!
+    keep_alive: 30m      # keep the model loaded between questions
+    timeout_s: 900       # per request; the first call also loads the model, CPU-only machines can be slow
+    seed: 42
+
+defaults:
+  embedder_type: ollama
+  embedder_model: nomic-embed-text      # small local embedding model (~270 MB)
+  embedder_fallback: tfidf_char         # used (loudly) if the embedding model is missing
